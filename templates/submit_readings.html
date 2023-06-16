@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/submit_readings-style.css' %}">
+</head>
+<body>
+    <h1>Readings Table</h1>
+    {% csrf_token %}
+  
+    <div id="app">
+      <form @submit.prevent="submitForm">
+        <div>
+          <label for="name">Bp_sys:</label><br>
+          <input id="name" type="text" v-model="bp_sys" required/>
+        </div>
+        <div>
+          <label for="name">Bp_dia:</label><br>
+          <input id="name" type="text" v-model="bp_dia" required/>
+        </div>
+        <div>
+          <label for="name">Bp_pulse:</label><br>
+          <input id="name" type="text" v-model="bp_pulse" required/>
+        </div>
+        <div>
+          <label for="email">Blood_sugar:</label><br>
+          <input id="email" type="email" v-model="blood_sugar" required/>
+        </div>
+        <div>
+          <label for="datetime">Date and Time:</label>
+          <input type="datetime-local" id="datetime" name="datetime" required>
+
+        </div>
+        <button :class="[name ? activeClass : '']" type="submit">Submit</button>
+        <div>
+          <h3>Response from server:</h3>
+          <pre>{{ response }}</pre>
+        </div>
+      </form>
+    </div>
+</body>
+</html>
