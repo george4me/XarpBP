@@ -1,4 +1,9 @@
-FROM python:3
+FROM python:3.9-buster 
+
+# install nginx
+RUN apt-get update && apt-get nstall nginx vim -y --no-install-recommends
+COPY nginx.default /etc/nginx/sites-availabble/default
+RUN ln -sf /dev
 
 # ENV PYTHONUNBUFFERED 1
 
