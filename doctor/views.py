@@ -6,14 +6,14 @@ from django.views.generic.base import TemplateView
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib import messages
-from .models import Appointment, PatientReadings
+from .models import Appointment, PatientReadings, Videos
 from django.views.generic import ListView
 import datetime
 from django.template import Context
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string, get_template
 from django.contrib.auth import logout, login, authenticate
-from .forms import RegistrationForm
+from .forms import RegistrationForm, PatientReadingForm
 from django.shortcuts import redirect
 from .models import UserInfo
 
@@ -46,6 +46,7 @@ class AppointmentTemplateView(TemplateView):
         email = request.POST.get("email")
         mobile = request.POST.get("mobile")
         message = request.POST.get("request")
+        readings = request.POST.get("readings")
 
         appointment = Appointment.objects.create(
             first_name=fname,
@@ -53,13 +54,15 @@ class AppointmentTemplateView(TemplateView):
             email=email,
             phone=mobile,
             request=message,
+            readings=readings,
         )
 
         appointment.save()
 
         messages.add_message(request, messages.SUCCESS, f"Thanks {fname} for making an appointment, we will email you ASAP!")
         return HttpResponseRedirect(request.path)
-    
+
+
 class ManageAppointmentTemplateView(ListView):
     template_name = "manage-appointments.html" 
     model = Appointment
@@ -100,6 +103,25 @@ class ManageAppointmentTemplateView(ListView):
         appointments = Appointment.objects.all()
         context.update({
             "title":"Manage Appointments"
+        })
+        return context
+    #end def get_context_data
+#end class
+
+
+
+class ManageReadingsTemplateView(ListView):
+    template_name = "manage-readings.html" 
+    model = PatientReadings
+    context_object_name = "patients_readngs"
+    login_required = True 
+    paginate_by = 3  
+
+    def get_context_data(self,*args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        appointments = PatientReadings.objects.all()
+        context.update({
+            "title":"Manage Readings"
         })
         return context
     #end def get_context_data
@@ -251,3 +273,43 @@ def get_readings(request):
     return TemplateResponse(request, 'login.html', {"all_readings":all_readings, "fn_user":request.user.first_name, "ln_user":request.user.last_name})
 
 
+def video_view(request):
+    videos=Videos.objects.all()
+    return render(request, 'videos.html', {"videos":videos})
+
+
+def patient_readings_view(request):
+
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    if request.method == 'POST':
+        form = PatientReadingForm(request.POST)
+        if form.is_valid():
+            bp_sys = request.POST.get('bp_sys') # form.cleaned_data['bp_sys'] 
+            bp_dia = request.POST.get('bp_dia')
+            bp_pulse = request.POST.get('bp_pulse')
+            datetime = request.POST.get('datetime')
+            blood_sugar = request.POST.get('blood_sugar')
+            user = request.user
+
+            # create the patientReadng instance
+            data = PatientReadings()
+            data.bp_sys = form.cleaned_data['bp_sys'] # you can also get the data this way
+            data.bp_dia = bp_dia
+            data.blood_sugar = blood_sugar
+            data.bp_pulse = bp_pulse
+            data.user = user
+            data.datetime = datetime
+
+            data.save()
+
+            # send a message to the client or user
+            messages.success(request, f"Dear {user} Your readings was successfully submitted.")
+
+            # you can add much more things here like sending emails or ...
+            return render(request, 'patient_readings.html')
+
+
+    return render(request, 'patient_readings.html')

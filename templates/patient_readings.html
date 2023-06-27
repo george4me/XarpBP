@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 
+    <section id="contact" class="card m-4 p-4">
+        <div class="container">
+            <div class="row text-center">
+            
+                <div class="col-sm-12">
+                <div class="contact-detail-box">
+                <i class="fas fa-user-md text-colored fa-3x"></i>
+                <h4>Patient Readings</h4>
+                {% comment %} <abbr title="Phone">P:</abbr> (123) 456-7890<br>
+                E: <a href="mailto:email@email.com" class="text-muted">email@email.com</a> {% endcomment %}
+                </div>
+            </div><!-- end col -->
+    
+    
+    
+            </div>
+            <!-- end row -->
+    
+    
+            <div class="row">
+                <!-- Contact form -->
+                <div class="col-sm-12">
+                    {% if messages %}
+                        {% for message in messages  %}
+                            <h1>{{message}}</h1>
+                        {% endfor %}
+
+                        
+                        <a href="/">
+                            <button class="btn btn-success" >Click here to go the HomePage</button>
+                        </a>
+
+                    {% else %}
+                        <form method="POST" class="form-main" action="{% url 'patient-readings' %}">
+                        {% csrf_token %}
+            
+                            <div class="form-group">
+                                <label for="name2">BP Sys</label>
+                                <input class="form-control" id="name2" name="bp_sys" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" placeholder="bp sys">
+                                <div class="error" id="err-name" style="display: none;">Please enter your bp sys</div>
+                            </div> <!-- /Form-name -->
+
+                            <div class="form-group">
+                                <label for="name2">BP dia</label>
+                                <input class="form-control" id="name2" name="bp_dia" type="text" placeholder="bp dia">
+                                <div class="error" id="err-name" style="display: none;">Please enter your bp dia</div>
+                            </div> <!-- /Form-name -->
+
+                            <div class="form-group">
+                                <label for="name2">Pulse</label>
+                                <input class="form-control" id="name2" name="bp_pulse" type="text" placeholder="pulse">
+                                <div class="error" id="err-name" style="display: none;">Please enter your pulse</div>
+                            </div> <!-- /Form-name -->
+                
+                            <div class="form-group">
+                                <label for="">blood_sugar</label>
+                                <input class="form-control" id="email2" name="blood_sugar" type="text" placeholder="blood_sugar">
+                                <div class="error" id="err-emailvld" style="display: none;">blood_sugar </div> 
+                            </div> <!-- /Form-email -->
+
+                            <div class="form-group">
+                                <label for="">datetime</label>
+                                <input class="form-control" id="email2" name="datetime" type="datetime-local" placeholder="Date and time">
+                                <div class="error" id="err-emailvld" style="display: none;">datetime </div> 
+                            </div> <!-- /Form-email -->
+                
+                        
+            
+                            <div class="row">            
+                                <button type="submit" class="btn btn-primary btn-shadow btn-rounded w-md" id="send">Send</button>
+                                </div> <!-- /col -->
+                            </div> <!-- /row -->
+            
+                        </form> <!-- /form -->
+                    {% endif %}
+                </div> <!-- end col -->
+        
+        
+            </div> <!-- end row -->
+                
+        </div>
+    </section>
+
+{% endblock %}

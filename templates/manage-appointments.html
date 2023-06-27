@@ -379,6 +379,9 @@
                             <div class="widget-49-meeting-points">
                                 <span>{{app.request}}</span>
                             </div>
+                            <div class="widget-49-meeting-points">
+                              <span>{{app.readings}}</span>
+                            </div>
                             <hr class="w-100">
                             {% if app.accepted == False %}
                             <form method="POST" action="{% url 'manage' %}">

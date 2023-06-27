@@ -8,6 +8,7 @@ class Appointment(models.Model):
     email = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
     request = models.TextField(blank=True)
+    readings = models.TextField(blank=True)
     sent_date = models.DateField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
     accepted_date = models.DateField(auto_now_add=False, null=True, blank=True)
@@ -36,3 +37,11 @@ class PatientReadings(models.Model):
     datetime = models.DateTimeField()
 
     
+
+
+
+class Videos(models.Model):
+    caption=models.CharField(max_length=100)
+    videos=models.FileField(upload_to="video/%y")
+    def __str__(self):
+        return self.caption   

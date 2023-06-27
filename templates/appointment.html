@@ -115,6 +115,14 @@
                                 <textarea type="text" id="ans" name="request" placeholder="" onblur="validate(6)"></textarea> 
                             </div>
                         </div>
+
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-12 flex-column d-flex"> 
+                                <label class="form-control-label px-3">Your Readings<span class="text-danger"> *</span></label> 
+                                <textarea type="text" id="ans" name="readings" placeholder="" onblur="validate(6)"></textarea> 
+                            </div>
+                        </div>
+
                         <div class="row justify-content-end">
                             <div class="form-group col-sm-6"> <button type="submit" class="btn-block btn-primary">Send</button> </div>
                         </div>
@@ -124,7 +132,8 @@
         </div>
     </div>
 
-{% endblock content %}  
+{% endblock  %}  
+
 {% block script %}
 function validate(val) {
 v1 = document.getElementById("fname");
