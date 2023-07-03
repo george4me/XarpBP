@@ -46,19 +46,19 @@
 
                             <div class="form-group">
                                 <label for="name2">BP dia</label>
-                                <input class="form-control" id="name2" name="bp_dia" type="text" placeholder="bp dia">
+                                <input class="form-control" id="name2" name="bp_dia" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" placeholder="bp dia">
                                 <div class="error" id="err-name" style="display: none;">Please enter your bp dia</div>
                             </div> <!-- /Form-name -->
 
                             <div class="form-group">
                                 <label for="name2">Pulse</label>
-                                <input class="form-control" id="name2" name="bp_pulse" type="text" placeholder="pulse">
+                                <input class="form-control" id="name2" name="bp_pulse" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" placeholder="pulse">
                                 <div class="error" id="err-name" style="display: none;">Please enter your pulse</div>
                             </div> <!-- /Form-name -->
                 
                             <div class="form-group">
                                 <label for="">blood_sugar</label>
-                                <input class="form-control" id="email2" name="blood_sugar" type="text" placeholder="blood_sugar">
+                                <input class="form-control" id="email2" name="blood_sugar" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" placeholder="blood_sugar">
                                 <div class="error" id="err-emailvld" style="display: none;">blood_sugar </div> 
                             </div> <!-- /Form-email -->
 

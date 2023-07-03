@@ -6,24 +6,40 @@ from django.forms import ModelForm
 
 
 
+# class RegistrationForm(UserCreationForm):
+#     first_name=forms.CharField(max_length=50, required=True)
+#     last_name=forms.CharField(max_length=50, required=False)
+#     #phone=forms.CharField(max_length=50, required=False)
+#     #gender=forms.CharField(max_length=50, required=False)
+#     username=forms.CharField(max_length=50, required=True)
+#     email=forms.CharField(max_length=50)
+#     password1=forms.CharField(max_length=50)
+#     password2=forms.CharField(max_length=50)
+
+
+#     class Meta:
+#         model=User
+#         fields=('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+
 class RegistrationForm(UserCreationForm):
-    first_name=forms.CharField(max_length=50, required=True)
-    last_name=forms.CharField(max_length=50, required=False)
-    #phone=forms.CharField(max_length=50, required=False)
-    #gender=forms.CharField(max_length=50, required=False)
-    username=forms.CharField(max_length=50, required=True)
-    email=forms.CharField(max_length=50)
-    password1=forms.CharField(max_length=50)
-    password2=forms.CharField(max_length=50)
-
-
+    email = forms.EmailField(max_length=100, help_text='Required. Enter a valid email address.')
+    #user_type = forms.ChoiceField(choices=(('doctor', 'Doctor'), ('patient', 'Patient')), widget=forms.RadioSelect)
+    gender = forms.ChoiceField(choices=(('male', 'Male'), ('female', 'Female'), ('other', 'Prefer not to say')), widget=forms.RadioSelect)
+    phone = forms.CharField(max_length=50, required=False)
+    is_doctor = forms.BooleanField()
+    
     class Meta:
-        model=User
-        fields=('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'is_doctor', 'password1', 'password2', 'gender', 'phone')
 
-
-
-
+    """
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user"""
+    
 class PatientReadingForm(ModelForm):
     bp_sys = forms.IntegerField(required=False)
     bp_dia= forms.IntegerField(required=False)

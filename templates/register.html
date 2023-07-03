@@ -1,72 +1,109 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registration</title>
-    <link rel="stylesheet" href="{% static 'css/register-style.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'css/register-style.css' %}" />
+  </head>
+  <body>
     <div class="container">
-        <div class="title">Registration</div>
-        <form method="POST">
-          {% csrf_token %}
-          <div class="user__details">
-            <div class="input__box">
-              <span class="details">Full Name</span>
-              <input type="text" name="first_name" placeholder="E.g: John Smith" required>
-            </div>
-            <div class="input__box">
-              <span class="details">Username</span>
-              <input type="text" name="username" placeholder="johnWC98" required>
-            </div>
-            <div class="input__box">
-              <span class="details">Email</span>
-              <input type="email" name="email" placeholder="johnsmith@hotmail.com" required>
-            </div>
-            <div class="input__box">
-              <span class="details">Phone Number</span>
-              <input type="tel" name="phone"  placeholder="Enter your phone number" >
-            </div> 
-            <div class="input__box">
-              <span class="details">Password</span>
-              <input type="password" name="password1" placeholder="********" required>
-            </div>
-            <div class="input__box">
-              <span class="details">Confirm Password</span>
-              <input type="password" name="password2" placeholder="********" required>
-            </div>
-      
+      <div class="title">Registration</div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="user__details">
+          <div class="input__box">
+            <span class="details">Full Name</span>
+            {{ form.first_name }}
           </div>
-          <div class="gender__details">
-            <input type="radio" name="gender" value="male"  id="dot-1">
-            <input type="radio" name="gender" value="female"  id="dot-2">
-            <input type="radio" name="gender" value="orther"  id="dot-3">
-            <span class="gender__title">Gender</span>
-            <div class="category">
-              <label for="dot-1">
-                <span class="dot one"></span>
-                <span>Male</span>
-              </label>
-              <label for="dot-2">
-                <span class="dot two"></span>
-                <span>Female</span>
-              </label>
-              <label for="dot-3">
-                <span class="dot three"></span>
-                <span>Prefer not to say</span>
-              </label>
-            </div>
-          </div> 
-          <div class="button">
-            <input type="submit" value="Register">
+          <div class="input__box">
+            <span class="details">Username</span>
+            {{ form.username }}
           </div>
-          <p>
-            <a href="{% url 'login' %}">login here</a>
-          </p>
-        </form>
-      </div>
-</body>
+          <div class="input__box">
+            <span class="details">Email</span>
+            {{ form.email }}
+          </div>
+          <div class="input__box">
+            <span class="details">Phone Number</span>
+            {{ form.phone }}
+          </div>
+          <div class="input__box">
+            <span class="details">Password</span>
+            {{ form.password1 }}
+          </div>
+          <div class="input__box">
+            <span class="details">Confirm Password</span>
+            {{ form.password2 }}
+          </div>
+        </div>
+
+        <div class="gender__details">
+          <input type="radio" name="gender" id="dot-1" />
+          <input type="radio" name="gender" id="dot-2" />
+          <input type="radio" name="gender" id="dot-3" />
+          <span class="gender__title">Gender</span>
+          <div class="category">
+            <label for="dot-1">
+              <span class="dot one"></span>
+              <span>Male</span>
+            </label>
+            <label for="dot-2">
+              <span class="dot two"></span>
+              <span>Female</span>
+            </label>
+            <label for="dot-3">
+              <span class="dot three"></span>
+              <span>Prefer not to say</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="gender__details">
+          <input type="radio" name="is_doctor" id="doctor" />
+          <input type="radio" name="is_doctor" id="patient" />
+
+          <span class="gender__title">User Type</span>
+          <div class="category">
+            <label for="doctor">
+              <span class="dot doctor"></span>
+              <span style="color: green;">Doctor</span>
+            </label>
+            <label for="patient">
+              <span class="dot patient"></span>
+              <span style="color: blue;">Patient</span>
+            </label>
+          </div>
+        </div>
+
+        {% comment %}
+        <div class="gender__details">
+          <span class="gender__title">Gender</span>
+          <div class="input__box">
+            <input type="radio" id="gender" value="Female" />
+          </div>
+
+          <input type="radio" id="gender" value="Female" />
+          {% for choice in form.gender.field.choices %}
+          <div class="category">
+            <input type="radio" id="id_{{ form.gender.auto_id }}" value="{{
+            choice.0 }}" {% if choice.0 == form.gender.value %}checked{% endif
+            %}>
+            <label for="id_{{ form.gender.auto_id }}">{{ choice.1 }}</label>
+          </div>
+          {% endfor %}
+        </div>
+        {% endcomment %}
+
+        <div class="button">
+          <input type="submit" value="Register" />
+        </div>
+        <p>
+          <a href="{% url 'login' %}">Login here</a>
+        </p>
+      </form>
+    </div>
+  </body>
 </html>

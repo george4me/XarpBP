@@ -1,18 +1,22 @@
-FROM python:3.9-buster 
+# Use the official Python base image
+FROM python:3.9
 
-# install nginx
-RUN apt-get update && apt-get nstall nginx vim -y --no-install-recommends
-COPY nginx.default /etc/nginx/sites-availabble/default
-RUN ln -sf /dev
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# ENV PYTHONUNBUFFERED 1
+# Set the working directory in the container
+WORKDIR /app
 
-# WORKDIR /app
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# ADD . /app
+# Copy the Django project code into the container
+COPY . .
 
-# COPY ./requirements.txt /app/requirements.txt
+# Expose the port on which your Django application runs (adjust if needed)
+EXPOSE 8000
 
-# RUN pip install -r requirements.txt
-
-# COPY . /app/
+# Run the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

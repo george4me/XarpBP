@@ -4,12 +4,18 @@
   <h1>Video Player</h1>
 
   <div class="container">
-    {% csrf_token %}
-      {% for x in videos %}
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="video_file">
+      <input type="text" name="caption" placeholder="Caption">
+      <button type="submit">Upload</button>
+    </form>
+
+    {% for x in videos %}
       <h3 class="text-center mt-2 mb-2">{{x.caption}}</h3>
-        <video class="embed-responsive embed-responsive-16byt9" controls="controls" >
+      <video class="embed-responsive embed-responsive-16byt9" controls="controls">
         <source src="{{ x.videos.url }}" type="video/mp4" />
-        </video>
-      {% endfor %}
+      </video>
+    {% endfor %}
   </div>
 {% endblock %}

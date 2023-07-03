@@ -111,12 +111,15 @@ form .gender__details .category {
   transition: all 0.3s ease;
 }
 
+#doctor:checked ~ .category .doctor,
+#patient:checked ~ .category .patient, 
 #dot-1:checked ~ .category .one,
 #dot-2:checked ~ .category .two,
 #dot-3:checked ~ .category .three {
   border-color: var(--sub-grey);
   background: var(--main-purple);
 }
+
 
 form input[type="radio"] {
   display: none;

@@ -46,7 +46,6 @@ class AppointmentTemplateView(TemplateView):
         email = request.POST.get("email")
         mobile = request.POST.get("mobile")
         message = request.POST.get("request")
-        readings = request.POST.get("readings")
 
         appointment = Appointment.objects.create(
             first_name=fname,
@@ -54,7 +53,6 @@ class AppointmentTemplateView(TemplateView):
             email=email,
             phone=mobile,
             request=message,
-            readings=readings,
         )
 
         appointment.save()
@@ -136,36 +134,49 @@ def Logout_view(request):
 def registeration_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('/')
-    
-    form=RegistrationForm(request.POST)
-    if request.method=='POST':
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            first_name=form.cleaned_data['first_name']
-            last_name=form.cleaned_data['last_name']
-            username=form.cleaned_data['username']
-            email=form.cleaned_data['email']
-            password1=form.cleaned_data['password1']
-            password2=form.cleaned_data['password2']
-            if password1 != password2:
-                return render(request, 'register.html')
-            else:
-                newuser=form.save()
-                newuser.save()
+            user = form.save()
+        if form.cleaned_data["user_type"] == "doctor":
+            user.is_staff = True
+            user_type = form.cleaned_data['user_type']
+            #UserType.objects.create(user=user, type=user_type)
+            UserInfo.objects.create(user=user, phone=form.cleaned_data['phone'], gender=form.changed_data['gender'])
+            return redirect('login') 
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html', {'form': form}) 
+    # form=RegistrationForm(request.POST)
+    # if request.method=='POST':
+    #     if form.is_valid():
+    #         first_name=form.cleaned_data['first_name']
+    #         last_name=form.cleaned_data['last_name']
+    #         username=form.cleaned_data['username']
+    #         email=form.cleaned_data['email']
+    #         password1=form.cleaned_data['password1']
+    #         password2=form.cleaned_data['password2']
+    #         if password1 != password2:
+    #             return render(request, 'register.html')
+    #         else:
+    #             newuser=form.save()
+    #             newuser.save()
 
-                phone=request.POST['phone']
-                gender=request.POST['gender']
+    #             phone=request.POST['phone']
+    #             gender=request.POST['gender']
 
-                userinfo = UserInfo(
-                    user_id = newuser.id,
-                    gender = gender,
-                    phone=phone
-                )
-                userinfo.save()
+    #             userinfo = UserInfo(
+    #                 user_id = newuser.id,
+    #                 gender = gender,
+    #                 phone=phone
+    #             )
+    #             userinfo.save()
 
-                return redirect('login')
+    #             return redirect('login')
 
 
-    return render(request, 'register.html')
+    # return render(request, 'register.html')
 
 
 
@@ -274,9 +285,15 @@ def get_readings(request):
 
 
 def video_view(request):
-    videos=Videos.objects.all()
-    return render(request, 'videos.html', {"videos":videos})
-
+    if request.method == 'POST':
+        caption = request.POST['caption']
+        video_file = request.FILES['video_file']
+        video = Videos(caption=caption, videos=video_file)
+        video.save()
+        return redirect('videos')
+    else:
+        videos = Videos.objects.all()
+        return render(request, 'videos.html', {'videos': videos})
 
 def patient_readings_view(request):
 
