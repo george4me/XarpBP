@@ -24,12 +24,13 @@ class Appointment(models.Model):
 class UserInfo(models.Model):
     GENDER_CHOICE=(
         ('female', 'Female'),
-        ('male', 'Male')
+        ('male', 'Male'),
+        ('other', 'Prefer not to say')
     )
     user=models.OneToOneField(User, related_name='user_info', on_delete=models.CASCADE)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICE, null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
-    is_doctor = models.BooleanField(default=False)
+    is_doctor = models.BooleanField()
 
 
     def __str__(self):

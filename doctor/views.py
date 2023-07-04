@@ -4,11 +4,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib import messages
 from .models import Appointment, PatientReadings, Videos
 from django.views.generic import ListView
 import datetime
+from django.shortcuts import get_object_or_404
 from django.template import Context
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string, get_template
@@ -135,48 +137,70 @@ def registeration_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('/')
 
+    # if request.method == 'POST':
+    #     form = RegistrationForm(request.POST)
+    #     if form.is_valid():
+    #         user = form.save()
+    #     if form.cleaned_data["user_type"] == "doctor":
+    #         user.is_staff = True
+    #         user_type = form.cleaned_data['user_type']
+    #         #UserType.objects.create(user=user, type=user_type)
+    #         UserInfo.objects.create(user=user, phone=form.cleaned_data['phone'], gender=form.changed_data['gender'])
+    #         return redirect('login') 
+    # else:
+    #     form = RegistrationForm()
+    # return render(request, 'register.html', {'form': form}) 
+    
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form=RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-        if form.cleaned_data["user_type"] == "doctor":
-            user.is_staff = True
-            user_type = form.cleaned_data['user_type']
-            #UserType.objects.create(user=user, type=user_type)
-            UserInfo.objects.create(user=user, phone=form.cleaned_data['phone'], gender=form.changed_data['gender'])
-            return redirect('login') 
+            # first_name=form.cleaned_data['first_name']
+            # last_name=form.cleaned_data['last_name']
+            username = form.cleaned_data['username']
+            is_doctor = is_doctor=request.POST['is_doctor']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+
+            if password1 != password2:
+                return render(request, 'register.html',{'form': form})
+            else:
+
+                user_in_DB = User.objects.filter(username=username).first()
+                if user_in_DB is None:
+
+                    newuser = form.save()
+
+                    if is_doctor == "doctor":
+                        is_doctor = True
+                        newuser.is_staff = True
+                    else:
+                        is_doctor = False
+
+                    
+                    newuser.save()
+
+                    phone=request.POST['phone']
+                    gender=request.POST['gender']
+                    
+
+                    userinfo = UserInfo(
+                        user_id = newuser.id,
+                        gender = gender,
+                        phone = phone,
+                        is_doctor = is_doctor
+                    )
+                    userinfo.save()
+                # else:
+                #     user_in_DB.is_staff = is_doctor
+                #     user_in_DB.save(commit=False)
+
+                return redirect('login')
+        
+        return render(request, 'register.html', {'form': form})
     else:
         form = RegistrationForm()
-    return render(request, 'register.html', {'form': form}) 
-    # form=RegistrationForm(request.POST)
-    # if request.method=='POST':
-    #     if form.is_valid():
-    #         first_name=form.cleaned_data['first_name']
-    #         last_name=form.cleaned_data['last_name']
-    #         username=form.cleaned_data['username']
-    #         email=form.cleaned_data['email']
-    #         password1=form.cleaned_data['password1']
-    #         password2=form.cleaned_data['password2']
-    #         if password1 != password2:
-    #             return render(request, 'register.html')
-    #         else:
-    #             newuser=form.save()
-    #             newuser.save()
 
-    #             phone=request.POST['phone']
-    #             gender=request.POST['gender']
-
-    #             userinfo = UserInfo(
-    #                 user_id = newuser.id,
-    #                 gender = gender,
-    #                 phone=phone
-    #             )
-    #             userinfo.save()
-
-    #             return redirect('login')
-
-
-    # return render(request, 'register.html')
+    return render(request, 'register.html', {'form': form})
 
 
 
@@ -185,6 +209,9 @@ def doctor_registeration_view(request):
         return HttpResponseRedirect('/')
     
     form=RegistrationForm(request.POST)
+    context = {
+        'form':form
+    }
     if request.method=='POST':
         if form.is_valid():
             first_name=form.cleaned_data['first_name']
@@ -194,7 +221,7 @@ def doctor_registeration_view(request):
             password1=form.cleaned_data['password1']
             password2=form.cleaned_data['password2']
             if password1 != password2:
-                return render(request, 'register.html')
+                return render(request, 'register.html', context)
             else:
                 newuser=form.save()
                 newuser.save()
@@ -215,7 +242,7 @@ def doctor_registeration_view(request):
                 return redirect('login')
 
 
-    return render(request, 'register.html')
+    return render(request, 'register.html',context)
 
 
 

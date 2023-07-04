@@ -41,9 +41,9 @@
         </div>
 
         <div class="gender__details">
-          <input type="radio" name="gender" id="dot-1" />
-          <input type="radio" name="gender" id="dot-2" />
-          <input type="radio" name="gender" id="dot-3" />
+          <input type="radio" name="gender" id="dot-1" value="female" />
+          <input type="radio" name="gender" id="dot-2" value="male" />
+          <input type="radio" name="gender" id="dot-3" value="other" />
           <span class="gender__title">Gender</span>
           <div class="category">
             <label for="dot-1">
@@ -62,40 +62,34 @@
         </div>
 
         <div class="gender__details">
-          <input type="radio" name="is_doctor" id="doctor" />
-          <input type="radio" name="is_doctor" id="patient" />
+          <input type="radio" name="is_doctor" id="doctor" value="doctor" />
+          <input type="radio" name="is_doctor" id="patient" value="patient" />
 
           <span class="gender__title">User Type</span>
           <div class="category">
             <label for="doctor">
               <span class="dot doctor"></span>
-              <span style="color: green;">Doctor</span>
+              <span style="color: green">Doctor</span>
             </label>
             <label for="patient">
               <span class="dot patient"></span>
-              <span style="color: blue;">Patient</span>
+              <span style="color: blue">Patient</span>
             </label>
           </div>
         </div>
 
-        {% comment %}
+        {% if form.errors %} 
         <div class="gender__details">
-          <span class="gender__title">Gender</span>
-          <div class="input__box">
-            <input type="radio" id="gender" value="Female" />
-          </div>
-
-          <input type="radio" id="gender" value="Female" />
-          {% for choice in form.gender.field.choices %}
-          <div class="category">
-            <input type="radio" id="id_{{ form.gender.auto_id }}" value="{{
-            choice.0 }}" {% if choice.0 == form.gender.value %}checked{% endif
-            %}>
-            <label for="id_{{ form.gender.auto_id }}">{{ choice.1 }}</label>
-          </div>
-          {% endfor %}
+          <span class="gender__title">Errors</span>
+          
+            {% for error in form.errors %}
+              <span class="gender__title" style="color: red"
+                >{{ error }}</span
+              >
+            {% endfor %} 
+          
         </div>
-        {% endcomment %}
+        {% endif %}
 
         <div class="button">
           <input type="submit" value="Register" />

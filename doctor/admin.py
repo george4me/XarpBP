@@ -7,11 +7,10 @@ admin.site.register(Appointment)
 admin.site.register(Videos)
 
 
+@admin.register(UserInfo)
 class UserInfoAdmin(admin.ModelAdmin):
     fields=['user', 'gender', 'phone']
 
-
-admin.register(UserInfo, UserInfoAdmin)
 
 
 
