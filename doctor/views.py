@@ -312,13 +312,6 @@ def get_readings(request):
 
 
 def video_view(request):
-    if request.method == 'POST':
-        caption = request.POST['caption']
-        video_file = request.FILES['video_file']
-        video = Videos(caption=caption, videos=video_file)
-        video.save()
-        return redirect('videos')
-    else:
         videos = Videos.objects.all()
         return render(request, 'videos.html', {'videos': videos})
 
